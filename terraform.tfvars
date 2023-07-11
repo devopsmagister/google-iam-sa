@@ -1,7 +1,7 @@
 service_account = {
   "devops-magister-account1" = {
     display_name  = "devops-magister-account"
-    project       = "freetrial-390703"
+    # project       = "freetrial-390703"
     disabled      = false
     description   = "devops-magister-account-1"
     # rotation_days = 5
@@ -9,9 +9,6 @@ service_account = {
   },
   "devops-magister-account2" = {
     display_name  = "devops-magister-account2"
-    project       = "freetrial-390703"
-    disabled      = false
-    description   = "devops-magister-account-1"
     # rotation_days = 10
     # key_enabled = true
 
@@ -42,3 +39,5 @@ iam_binding = {
   ],
 
 }
+
+project       = "freetrial-390703"

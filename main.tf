@@ -16,10 +16,10 @@ locals {
   service_account = { for x, y in var.service_account : x => merge(
     {
       account_id    = x
-      display_name  = try(y.display_name, y.account_id)
+      display_name  = try(y.display_name, x)
       project       = try(y.project, var.project)
       disabled      = try(y.disabled, false)
-      description   = try(y.description, y.account_id)
+      description   = try(y.description, x)
       rotation_days = try(y.rotation_days, 90)
       key_enabled   = try(y.key_enabled, false)
     }
