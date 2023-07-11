@@ -13,15 +13,15 @@ terraform {
 }
 
 locals {
-  service_account = { for x, y in var.service_account : x => merge(
+  service_account = { for x in var.service_account : x.account_id => merge(
     {
-      account_id    = x
-      display_name  = try(y.display_name, x)
-      project       = try(y.project, var.project)
-      disabled      = try(y.disabled, false)
-      description   = try(y.description, x)
-      rotation_days = try(y.rotation_days, 90)
-      key_enabled   = try(y.key_enabled, false)
+      account_id    = x.account_id
+      display_name  = try(x.display_name, x.account_id)
+      project       = try(x.project, null) == null ? var.project : x.project
+      disabled      = try(x.disabled, false)
+      description   = try(x.description, x.account_id)
+      rotation_days = try(x.rotation_days, 90)
+      key_enabled   = try(x.key_enabled, false)
     }
     )
 
@@ -65,5 +65,4 @@ resource "google_service_account_key" "mkey" {
 
 output "service_account" {
   value = google_service_account.service_account
-  # value = local.service_account
 }
