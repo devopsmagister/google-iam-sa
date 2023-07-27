@@ -1,3 +1,7 @@
+variable "service_account_keys" {
+  type = map(string)
+}
+
 variable "service_account" {
   type = list(object({
     account_id    = string

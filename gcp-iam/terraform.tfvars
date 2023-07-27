@@ -1,3 +1,9 @@
+service_account_keys = {
+    devops-magister-account1 = 10
+    devops-magister-account2 = 4
+
+}
+
 service_account = [
   {
     account_id   = "devops-magister-account1"

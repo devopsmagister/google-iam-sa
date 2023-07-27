@@ -47,14 +47,34 @@ resource "google_project_iam_binding" "project" {
   ]
 }
 
+# resource "time_rotating" "key_rotation" {
+#   for_each = { for x, y in local.service_account : x => y.rotation_days if y.key_enabled }
+
+#   rotation_days = each.value
+# }
+
+# resource "google_service_account_key" "mkey" {
+#   for_each = { for x, y in local.service_account : x => y if y.key_enabled }
+
+#   service_account_id = google_service_account.service_account[each.key].name
+
+#   keepers = {
+#     rotation_time = time_rotating.key_rotation[each.key].rotation_rfc3339
+#   }
+# }
+
+output "service_account" {
+  value = google_service_account.service_account
+}
+
 resource "time_rotating" "key_rotation" {
-  for_each = { for x, y in local.service_account : x => y.rotation_days if y.key_enabled }
+  for_each = var.service_account_keys
 
   rotation_days = each.value
 }
 
 resource "google_service_account_key" "mkey" {
-  for_each = { for x, y in local.service_account : x => y if y.key_enabled }
+  for_each = var.service_account_keys
 
   service_account_id = google_service_account.service_account[each.key].name
 
@@ -63,6 +83,3 @@ resource "google_service_account_key" "mkey" {
   }
 }
 
-output "service_account" {
-  value = google_service_account.service_account
-}
