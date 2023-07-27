@@ -24,10 +24,10 @@ resource "google_monitoring_alert_policy" "db_creation_alert" {
       dynamic "condition_threshold" {
         for_each = { for x in try(conditions.value.condition_threshold, []) : x.filter => x }
         content {
-          filter     = condition_threshold.key
-          duration   = condition_threshold.value.duration
-          comparison = condition_threshold.value.comparison
-          # threshold_value = try(condition_threshold.value.threshold_value, null)
+          filter          = condition_threshold.key
+          duration        = condition_threshold.value.duration
+          comparison      = condition_threshold.value.comparison
+          threshold_value = try(condition_threshold.value.threshold_value, null)
           dynamic "aggregations" {
             for_each = { for x in try(condition_threshold.value.aggregations, []) : x.per_series_aligner => x }
             content {
@@ -73,23 +73,4 @@ resource "google_monitoring_alert_policy" "db_creation_alert" {
   user_labels = {
     foo = "bar"
   }
-}
-
-locals {
-  policy_details = { for x in var.policy_details : x.display_name => merge(
-    {
-      combiner       = try(x.combiner, "OR")
-      conditions     = try(x.conditions, [])
-      alert_strategy = try(x.alert_strategy, [])
-      user_labels    = try(x.user_labels, null)
-    }
-    )
-
-  }
-}
-
-variable "policy_details" {
-  # type        = list(map(object))
-  default     = []
-  description = "description"
 }
